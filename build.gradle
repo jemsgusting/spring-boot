@@ -1,0 +1,33 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+}
+
+group = 'com.yjm.camping'
+version = '0.0.1-test'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 웹 서버
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // 테스트용
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // JPA / DB 연동
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // 로그인 기능을 위한 Security
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // 타임리프 템플릿 엔진 (정적 HTML 연동 시)
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>특가 캠핑장 예약 시스템</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .camp-item {
+      background-color: white;
+      border-radius: 8px;
+      margin: 20px 0;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .day {
+      background-color: #ecf0f1;
+      text-align: center;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .day:hover {
+      background-color: #d0e6d0;
+    }
+    .selected {
+      background-color: #27ae60;
+      color: white;
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .btn {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #219150;
+    }
+  </style>
+</head>
+<body>
+  <h1>특가 캠핑장 목록</h1>
+  <div id="campingList"></div>
+
+  <script>
+    const campingData = [
+      {
+        name: "곰돌이 캠핑장",
+        imageUrl: ""
+      },
+      {
+        name: "솔향기 오토캠핑장",
+        imageUrl: ""
+      },
+      {
+        name: "하늘숲 글램핑",
+        imageUrl: ""
+      }
+    ];
+
+    const campingList = document.getElementById("campingList");
+
+    // 날짜 유틸
+    function getDaysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    // 달력 생성
+    function createCalendar(container, year, month, selectedDateCallback) {
+      container.innerHTML = ""; // 초기화
+
+      const header = document.createElement('div');
+      header.className = 'calendar-header';
+
+      const title = document.createElement('span');
+      title.textContent = `${year}년 ${month + 1}월`;
+      header.appendChild(title);
+
+      const prev = document.createElement('button');
+      prev.textContent = '◀';
+      prev.onclick = () => createCalendar(container, month === 0 ? year - 1 : year, month === 0 ? 11 : month - 1, selectedDateCallback);
+      header.insertBefore(prev, title);
+
+      const next = document.createElement('button');
+      next.textContent = '▶';
+      next.onclick = () => createCalendar(container, month === 11 ? year + 1 : year, month === 11 ? 0 : month + 1, selectedDateCallback);
+      header.appendChild(next);
+
+      container.appendChild(header);
+
+      const calendar = document.createElement('div');
+      calendar.className = 'calendar';
+
+      const daysInMonth = getDaysInMonth(year, month);
+      const firstDay = new Date(year, month, 1).getDay(); // 요일
+
+      // 빈 칸 삽입
+      for (let i = 0; i < firstDay; i++) {
+        calendar.appendChild(document.createElement('div'));
+      }
+
+      // 날짜 생성
+      for (let day = 1; day <= daysInMonth; day++) {
+        const d = document.createElement('div');
+        d.className = 'day';
+        d.textContent = day;
+        d.onclick = () => {
+          [...calendar.querySelectorAll('.day')].forEach(el => el.classList.remove('selected'));
+          d.classList.add('selected');
+          selectedDateCallback(`${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
+        };
+        calendar.appendChild(d);
+      }
+
+      container.appendChild(calendar);
+    }
+
+    campingData.forEach((camp, index) => {
+      const box = document.createElement("div");
+      box.className = "camp-item";
+
+      const title = document.createElement("div");
+      title.textContent = camp.name;
+      title.style.fontWeight = "bold";
+
+      const calendarContainer = document.createElement("div");
+      const selected = { date: null };
+
+      // 예약 버튼
+      const reserveBtn = document.createElement("button");
+      reserveBtn.className = "btn";
+      reserveBtn.textContent = "예약하기";
+      reserveBtn.onclick = () => {
+        if (!selected.date) {
+          alert("예약할 날짜를 선택하세요!");
+        } else {
+          alert(`${camp.name} 예약일자: ${selected.date}`);
+          // TODO: 예약 API 호출
+        }
+      };
+
+      createCalendar(calendarContainer, 2025, 7, (selectedDate) => {
+        selected.date = selectedDate;
+      });
+
+      box.appendChild(title);
+      box.appendChild(calendarContainer);
+      box.appendChild(reserveBtn);
+      campingList.appendChild(box);
+    });
+  </script>
+</body>
+</html>

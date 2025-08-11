@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- 상단바 -->
+<div th:fragment="navbar">
+  <div style="padding:10px; background:#f3f4f6; display:flex; justify-content:space-between; align-items:center;">
+    <div><a href="/" style="text-decoration:none; color:#111827; font-weight:700;">캠핑 예약</a></div>
+
+    <div>
+      <span th:if="${session.LOGIN_USER_ID != null}">
+        로그인됨: <b th:text="${session.LOGIN_USERNAME}">user</b>
+        (ID: <span th:text="${session.LOGIN_USER_ID}">0</span>)
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <button type="submit">로그아웃</button>
+        </form>
+      </span>
+      <span th:if="${session.LOGIN_USER_ID == null}">
+        <a th:href="@{/login}" style="margin-right:10px;">로그인</a>
+        <a th:href="@{/register}">회원가입</a>
+      </span>
+    </div>
+  </div>
+
+  <!-- 메시지 -->
+  <div style="padding:10px;">
+    <div th:if="${msg}" style="color:green;" th:text="${msg}"></div>
+    <div th:if="${err}" style="color:#b91c1c;" th:text="${err}"></div>
+  </div>
+</div>
+</body>
+</html>

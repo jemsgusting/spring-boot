@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>특가 캠핑 이벤트</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin:0; background:#f6f9fb; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#0f766e; color:white; }
+    a, a:visited { color:#0f766e; text-decoration:none; }
+    .btn { padding:6px 10px; border:1px solid #0f766e; border-radius:8px; }
+    main { padding:24px; max-width:960px; margin:0 auto; }
+    .card { background:white; border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,.06); padding:20px; margin:16px 0; }
+    .badge { display:inline-block; padding:4px 8px; background:#ecfeff; border:1px solid #99f6e4; border-radius:999px; font-size:12px; margin-right:6px; }
+    .session { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#111827; color:#e5e7eb; padding:10px 12px; border-radius:10px; overflow:auto; }
+  </style>
+</head>
+<body>
+<header>
+  <div><strong>특가 캠핑장</strong></div>
+  <nav>
+    <a href="/" style="color:white; margin-right:12px;">홈</a>
+    <a href="/specials" style="color:white; margin-right:12px;">특가 이벤트</a>
+    <span th:if="${loginUsername != null}">
+      <form th:action="@{/logout}" method="post" style="display:inline;">
+        <span th:text="'안녕하세요, ' + ${loginUsername} + '님'"></span>
+        <button type="submit" class="btn" style="margin-left:10px; background:white;">로그아웃</button>
+      </form>
+    </span>
+    <span th:if="${loginUsername == null}">
+      <a href="/login" class="btn" style="background:white;">로그인</a>
+    </span>
+  </nav>
+</header>
+
+<main>
+  <div th:if="${msg}" class="card" th:text="${msg}"></div>
+  <div th:if="${err}" class="card" style="border:1px solid #fecaca; background:#fff1f2;" th:text="${err}"></div>
+
+  <section class="card">
+    <h1 th:text="${eventTitle}">⛺ 특가 캠핑 대전 48시간 한정!</h1>
+    <p th:text="${eventDesc}">전국 인기 캠핑장 최대 60% 할인 · 오늘 자정 오픈</p>
+    <div>
+      <span class="badge" th:each="h : ${highlights}" th:text="${h}">하이라이트</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>세션 정보</h2>
+    <p><strong>로그인 사용자</strong>:
+      <span th:text="${loginUsername != null ? loginUsername : '비로그인'}">user</span>
+    </p>
+    <p><strong>세션 ID</strong></p>
+    <div class="session" th:text="${sessionId}">SESSION_ID</div>
+
+    <!-- (참고) Thymeleaf 내장 객체로도 접근 가능
+         <div class="session" th:text="${#httpSession.id}"></div>
+    -->
+  </section>
+
+  <section class="card">
+    <h2>인기 특가 라인업</h2>
+    <ul>
+      <li>지리산 캠핑장 · 주말 2박 3일 44% OFF</li>
+      <li>설악산 캠핑장 · 글램핑 1박 39% OFF</li>
+      <li>한라산 캠핑장 · 카라반 1박 52% OFF</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
