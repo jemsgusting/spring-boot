@@ -29,5 +29,4 @@ dependencies {
     // 타임리프 템플릿 엔진 (정적 HTML 연동 시)
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-    
 }
